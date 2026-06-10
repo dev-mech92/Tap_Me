@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Notify</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f172a">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Inter,Arial,sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#0f172a,#1e293b);
+    padding:20px;
+}
+
+.card{
+    width:100%;
+    max-width:450px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:24px;
+    padding:25px;
+}
+
+h1{
+    color:white;
+    font-size:28px;
+    margin-bottom:8px;
+}
+
+p{
+    color:#cbd5e1;
+    margin-bottom:20px;
+}
+
+textarea{
+    width:100%;
+    height:180px;
+    resize:none;
+    border:none;
+    outline:none;
+    border-radius:16px;
+    padding:15px;
+    font-size:16px;
+    background:rgba(255,255,255,.1);
+    color:white;
+}
+
+textarea::placeholder{
+    color:#94a3b8;
+}
+
+button{
+    width:100%;
+    margin-top:15px;
+    border:none;
+    border-radius:16px;
+    padding:15px;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    background:white;
+}
+
+#status{
+    text-align:center;
+    margin-top:15px;
+    color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>📨 Notify</h1>
+
+    <p>Auto sends "Screen Unlocked" when opened.</p>
+
+    <textarea
+        id="message"
+        placeholder="Type your custom message..."></textarea>
+
+    <button onclick="sendCustomMessage()">
+        Send Notification
+    </button>
+
+    <div id="status"></div>
+
+</div>
+
+<script>
+
+const BOT_TOKEN = "YOUR_BOT_TOKEN";
+const CHAT_ID = "7107184334";
+
+async function sendTelegram(text){
+
+    const status =
+        document.getElementById("status");
+
+    try{
+
+        const response = await fetch(
+            `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    chat_id:CHAT_ID,
+                    text:text
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if(data.ok){
+            status.innerHTML = "✅ Sent";
+        }
+        else{
+            status.innerHTML = "❌ " + data.description;
+        }
+
+    }catch(error){
+        status.innerHTML = "❌ Failed";
+    }
+
+}
+
+window.addEventListener("load", () => {
+    sendTelegram("Screen Unlocked");
+});
+
+function sendCustomMessage(){
+
+    const text =
+        document.getElementById("message")
+        .value
+        .trim();
+
+    if(!text){
+        alert("Enter a message");
+        return;
+    }
+
+    sendTelegram(text);
+
+    document.getElementById("message").value = "";
+}
+
+if("serviceWorker" in navigator){
+    navigator.serviceWorker.register("sw.js");
+}
+
+</script>
+
+</body>
+</html>
