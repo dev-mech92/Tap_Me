@@ -88,16 +88,16 @@ button{
 
 <div class="card">
 
-    <h1>📨 Notify</h1>
+    <h1> Anime hehe</h1>
 
-    <p>Auto sends "Screen Unlocked" when opened.</p>
+    <p> you can message aliens from here</p>
 
     <textarea
         id="message"
-        placeholder="Type your custom message..."></textarea>
+        placeholder="Type your message...*evil laugh*"></textarea>
 
     <button onclick="sendCustomMessage()">
-        Send Notification
+        Are you sure?
     </button>
 
     <div id="status"></div>
@@ -133,20 +133,20 @@ async function sendTelegram(text){
         const data = await response.json();
 
         if(data.ok){
-            status.innerHTML = "✅ Sent";
+            status.innerHTML = "well, it worked ig";
         }
         else{
-            status.innerHTML = "❌ " + data.description;
+            status.innerHTML = "looks like they didn't like your message" + data.description;
         }
 
     }catch(error){
-        status.innerHTML = "❌ Failed";
+        status.innerHTML = "they probably hate you" ;
     }
 
 }
 
 window.addEventListener("load", () => {
-    sendTelegram("Screen Unlocked");
+    sendTelegram("message received");
 });
 
 function sendCustomMessage(){
@@ -157,7 +157,7 @@ function sendCustomMessage(){
         .trim();
 
     if(!text){
-        alert("Enter a message");
+        alert("show your creativity");
         return;
     }
 
